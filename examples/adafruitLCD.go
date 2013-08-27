@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/davecheney/gpio"
-	"github.com/davecheney/gpio"
+	"github.com/davecheney/gpio/rpi"
 	lcd "github.com/timkettering/gorpi-lcd"
 )
 
