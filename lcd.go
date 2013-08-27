@@ -1,4 +1,4 @@
-package main
+package lcd
 
 import (
 	"fmt"
@@ -43,7 +43,7 @@ func (l *LCDPanel) Message(val byte) {
 /* low level bit writes */
 func (l *LCDPanel) send(val byte, mode int) {
 
-	fmt.Printf("Begin :send val:%v, sending %d to rsPin %d\n", val, mode, l.rsPin)
+	//fmt.Printf("Begin :send val:%v, sending %d to rsPin %d\n", val, mode, l.rsPin)
 
 	// set pin mode
 	if mode > 0 {
@@ -56,7 +56,7 @@ func (l *LCDPanel) send(val byte, mode int) {
 	l.Write4Bits(val >> 4)
 	l.Write4Bits(val)
 
-	fmt.Printf("\nEnd :send for %v\n", val)
+	//fmt.Printf("\nEnd :send for %v\n", val)
 }
 
 func (l *LCDPanel) Write4Bits(val byte) {
@@ -74,15 +74,10 @@ func (l *LCDPanel) Write4Bits(val byte) {
 	var mask uint8 = 1 << 3
 	for i := 0; i < 4; i++ {
 		if val&mask >= 1 {
-			fmt.Printf("1")
 			l.dataPins[i].Set()
-		} else {
-			fmt.Printf("0")
-			//			l.dataPins[i].Clear()
 		}
 		mask >>= 1
 	}
-	//fmt.Printf("Done writing 4 bits, doing pulseEnable\n")
 }
 
 func (l *LCDPanel) pulseEnable() {

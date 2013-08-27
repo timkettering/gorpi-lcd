@@ -8,7 +8,7 @@ import (
 
 func main() {
 
-	lcdPanel := new(LCDPanel)
+	lcdPanel := new(lcd.LCDPanel)
 
 	// set up pins
 	// enable pin
@@ -30,7 +30,7 @@ func main() {
 	lcdPanel.AddDataPin(gpio23)
 
 	// start init
-	DelayMicroseconds(50000)
+	lcd.DelayMicroseconds(50000)
 
 	lcdPanel.Command(0x33) // $33 8-bit mode
 	lcdPanel.Command(0x32) // $32 8-bit mode
@@ -41,7 +41,7 @@ func main() {
 	lcdPanel.Command(0x04 | 0x02 | 0x00)
 
 	lcdPanel.Command(0x01)
-	DelayMicroseconds(3000)
+	lcd.DelayMicroseconds(3000)
 
 	// send text
 	lcdPanel.CommandString("TEST")
