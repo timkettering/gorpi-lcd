@@ -1,9 +1,7 @@
 package lcd
 
 import (
-	"fmt"
 	"github.com/davecheney/gpio"
-	"github.com/davecheney/gpio/rpi"
 	"time"
 )
 
