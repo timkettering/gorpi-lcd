@@ -5,10 +5,35 @@ import (
 	"time"
 )
 
+const (
+	NEWLINE = 0xC0
+)
+
 type LCDPanel struct {
 	rsPin    gpio.Pin   // the pin for 'rs'
 	enPin    gpio.Pin   // the pin for 'en'
 	dataPins []gpio.Pin // array for data pins
+}
+
+/* high level functions */
+func (l *LCDPanel) Message(str string) {
+
+	for _, c := range str {
+		if c == '\n' {
+			l.CommandByte(NEWLINE)
+		} else {
+			l.MessageByte(byte(c))
+		}
+	}
+}
+
+/* mid level functions */
+func (l *LCDPanel) CommandByte(val byte) {
+	l.send(val, 0)
+}
+
+func (l *LCDPanel) MessageByte(val byte) {
+	l.send(val, 1)
 }
 
 func (l *LCDPanel) SetRsPin(pin gpio.Pin) {
@@ -23,25 +48,8 @@ func (l *LCDPanel) AddDataPin(pin gpio.Pin) {
 	l.dataPins = append(l.dataPins, pin)
 }
 
-func (l *LCDPanel) CommandString(str string) {
-	byteArray := []byte(str)
-	for _, b := range byteArray {
-		l.Message(b)
-	}
-}
-
-func (l *LCDPanel) Command(val byte) {
-	l.send(val, 0)
-}
-
-func (l *LCDPanel) Message(val byte) {
-	l.send(val, 1)
-}
-
 /* low level bit writes */
 func (l *LCDPanel) send(val byte, mode int) {
-
-	//fmt.Printf("Begin :send val:%v, sending %d to rsPin %d\n", val, mode, l.rsPin)
 
 	// set pin mode
 	if mode > 0 {
@@ -53,8 +61,6 @@ func (l *LCDPanel) send(val byte, mode int) {
 	// write the 4 bits sequentially
 	l.Write4Bits(val >> 4)
 	l.Write4Bits(val)
-
-	//fmt.Printf("\nEnd :send for %v\n", val)
 }
 
 func (l *LCDPanel) Write4Bits(val byte) {
